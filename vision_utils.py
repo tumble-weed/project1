@@ -1,9 +1,10 @@
 
 import torchvision
 import numpy as np
+vgg_mean = (0.485, 0.456, 0.406)
+vgg_std = (0.229, 0.224, 0.225)
 def get_vgg_transform_detransform(imsize=(227,227)):
-    vgg_mean = (0.485, 0.456, 0.406)
-    vgg_std = (0.229, 0.224, 0.225)
+
     
     model_mean,model_std = vgg_mean,vgg_std 
     preprocess = torchvision.transforms.Compose([torchvision.transforms.Resize(imsize),
