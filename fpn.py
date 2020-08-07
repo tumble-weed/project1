@@ -2,7 +2,7 @@ from termcolor import colored
 import torch
 import numpy as np
 import itertools
-from masked_model import MaskedModel
+from .masked_model import MaskedModel
 
 def keep_feat(layer,input,output):
     layer.feat = output
