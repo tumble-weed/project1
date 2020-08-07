@@ -140,12 +140,13 @@ def add_top_down_path(alexnet):
                                     )
 
     refine_layers = list(refine.children())
+    '''
     def record_pre_mask(self,input,output):
         global debug_dict
         debug_dict['pre_mask'] = input 
         debug_dict['mask'] = output
     refine_layers[-1].register_forward_hook(record_pre_mask)
-
+    '''
     print(laterals.keys(),upsamples.keys())
     for part in [upsamples,laterals,refine]:
         if isinstance(part,dict):
