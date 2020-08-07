@@ -80,7 +80,7 @@ class MaskedModel(torch.nn.Module):
                     mask_l = self.mask_dict[li]
                 else:
                     mask_l = anti_aliasing_filter(self.mask_dict['input'],x.shape[-2:],padding='symmetric')
-                    debug_dict['smooth_mask'] = mask_l
+#                     debug_dict['smooth_mask'] = mask_l
                     mask_l = torch.nn.functional.interpolate(mask_l,x.shape[-2:],mode='bilinear')
                     mask_l = ste(mask_l); print(colored('using STE','blue','on_yellow'))
                 # mask_l = noisy_ste(mask_l)
