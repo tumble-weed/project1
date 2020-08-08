@@ -2,6 +2,7 @@ import torch
 import numpy as np
 from termcolor import colored
 from .gaussian_smoothing import anti_aliasing_filter
+from .activation import *
 class MaskedModel(torch.nn.Module):
     @staticmethod
     def _attach_masks(layers, masking_condition, mask_at = 'output'):
