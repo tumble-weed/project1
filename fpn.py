@@ -158,10 +158,10 @@ def add_top_down_path(alexnet,masking_condition):
 debugprint = lambda *args:None
 
 class AlexNetFPN():
-    def __init__(self,alexnet):
+    def __init__(self,alexnet,masking_condition):
         self.alexnet = alexnet
         self.forward_layers = list(alexnet.features.children())
-        self.upsamples,self.laterals,self.refine,self.top_down_layer_ixs = add_top_down_path(self.alexnet)
+        self.upsamples,self.laterals,self.refine,self.top_down_layer_ixs = add_top_down_path(self.alexnet,masking_condition)
         # self.instance_norms = {'lateral':{},'upsample':{}}
         # for ix_of_ix,lix in enumerate(self.laterals):
         #     self.instance_norms 
