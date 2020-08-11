@@ -55,7 +55,7 @@ def get_mask_layer_at_offset(offset = -12#-6#
         return False
     return mask_layer_at_offset
 
-def add_top_down_path(alexnet,masking_condition):
+def add_top_down_path(alexnet,masking_condition,mask_at):
     # masked_convs = []
     conv_backbone =  alexnet.features
     feature_layers = list(conv_backbone.children())
@@ -72,7 +72,7 @@ def add_top_down_path(alexnet,masking_condition):
     alexnet.features = MaskedModel(alexnet.features,
                                 #    get_mask_only_first_relu() ,
                                     masking_condition, 
-                                    mask_at = 'output')
+                                    mask_at = mask_at)
     _ = alexnet(dummy_forward)
     conv_backbone =  alexnet.features
     feature_layers = list(conv_backbone.children())    
@@ -158,10 +158,11 @@ def add_top_down_path(alexnet,masking_condition):
 debugprint = lambda *args:None
 
 class AlexNetFPN():
-    def __init__(self,alexnet,masking_condition):
+    def __init__(self,alexnet,masking_condition,mask_at):
         self.alexnet = alexnet
         self.forward_layers = list(alexnet.features.children())
-        self.upsamples,self.laterals,self.refine,self.top_down_layer_ixs = add_top_down_path(self.alexnet,masking_condition)
+        self.mask_at = mask_at
+        self.upsamples,self.laterals,self.refine,self.top_down_layer_ixs = add_top_down_path(self.alexnet,masking_condition,self.mask_at)
         # self.instance_norms = {'lateral':{},'upsample':{}}
         # for ix_of_ix,lix in enumerate(self.laterals):
         #     self.instance_norms 
