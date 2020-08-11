@@ -67,3 +67,56 @@ def anti_aliasing_filter(image,output_shape,
     sigma=anti_aliasing_sigma, padding=padding)
     return image
     pass    
+
+#------------------------------------------------
+# box filter
+#-------------------------------------------------
+from torch import nn
+from termcolor import colored
+def _box_kernel(channels=3,kernel_size=15,padding='symmetrics'):
+
+    box_kernel = torch.ones((1,1,kernel_size,kernel_size))
+    box_kernel = box_kernel/box_kernel.sum()
+    
+    # Reshape to 2d depthwise convolutional weight
+    box_kernel = box_kernel.repeat(channels, 1, 1, 1)
+    
+    box_filter = nn.Conv2d(in_channels=channels, out_channels=channels,
+                                kernel_size=kernel_size, groups=channels, bias=False)
+    
+    box_filter.weight.data = box_kernel
+    box_filter.weight.requires_grad = False
+    if padding == 'symmetric':
+        padding = torch.nn.ReflectionPad2d(kernel_size//2)
+    else:
+        raise NotImplementedError
+    complete = torch.nn.Sequential(
+        padding,        
+        box_filter,
+        )
+    return complete
+def box_filter(t,kernel_size=15,padding='symmetric'):
+    layer = _box_kernel(channels=t.shape[1],kernel_size=kernel_size,padding=padding)
+    layer.to(t.device)
+    out = layer(t)
+    return out
+    
+def anti_aliasing_box_filter(image,output_shape,
+                                padding='symmetric',truncate=4.0):
+    print(colored('applying box filter','red','on_yellow'))
+    input_shape = image.shape[-2:]
+    factors = (np.asarray(input_shape, dtype=float) /
+                    np.asarray(output_shape, dtype=float))
+
+
+    sigma = np.max(np.maximum(0, (factors - 1) / 2))
+    half_kernel_size = int(truncate * sigma + 0.5)
+    # print(half_kernel_size)
+    kernel_size = half_kernel_size*2 + 1 
+    print(kernel_size)
+    # mode = 'symmetric' ! 'constant'
+    image = box_filter(image, kernel_size = kernel_size,
+     padding=padding)
+    return image
+    pass
+# anti_aliasing_box_filter(torch.ones((1,3,227,227)),(13,13)).shape
