@@ -63,7 +63,7 @@ class MaskedModel(torch.nn.Module):
             
             if self.mask_at == 'input':
                 # print('applying mask')
-                raise NotImplementedError
+#                 raise NotImplementedError
                 if li in self.mask_dict:
                     mask_l = self.mask_dict[li]
                 else:
