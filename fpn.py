@@ -55,7 +55,7 @@ def get_mask_layer_at_offset(offset = -12#-6#
         return False
     return mask_layer_at_offset
 
-def add_top_down_path(alexnet,masking_condition,mask_at):
+def add_top_down_path(alexnet,masking_condition,mask_at='output'):
     # masked_convs = []
     conv_backbone =  alexnet.features
     feature_layers = list(conv_backbone.children())
@@ -158,7 +158,7 @@ def add_top_down_path(alexnet,masking_condition,mask_at):
 debugprint = lambda *args:None
 
 class AlexNetFPN():
-    def __init__(self,alexnet,masking_condition,mask_at):
+    def __init__(self,alexnet,masking_condition,mask_at='output'):
         self.alexnet = alexnet
         self.forward_layers = list(alexnet.features.children())
         self.mask_at = mask_at
