@@ -131,7 +131,7 @@ def add_top_down_path(alexnet,masking_condition,mask_at='output'):
     refine = torch.nn.Sequential(torch.nn.Upsample(size=(227,227)),
                                     torch.nn.ZeroPad2d(1),
         torch.nn.Conv2d(running_chan,1,(3,3)),
-        torch.nn.InstanceNorm2d(running_chan),
+#         torch.nn.InstanceNorm2d(running_chan),
                         # torch.nn.Conv2d(running_chan,1,(1,1),1),
 
                                 # Average(),
