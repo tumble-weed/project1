@@ -137,7 +137,7 @@ def add_top_down_path(alexnet,masking_condition,mask_at='output'):
 
                                 # Average(),
                                 #  SignumSTE(),
-                                    torch.nn.Sigmoid()
+                                    
                                     )
 
     refine_layers = list(refine.children())
@@ -209,7 +209,9 @@ class AlexNetFPN():
             # lat = self.laterals[fix]
         # import pdb;pdb.set_trace()
         print(colored(f'{x.max()},{x.min()}','yellow'))
-        mask = self.refine(x)
+        pre_sigmoid_mask = self.refine(x)
+        self.pre_sigmoid_mask = pre_sigmoid_mask
+        mask = torch.nn.functional.sigmoid(pre_sigmoid_mask)
         # mask = x
         print(colored(f'{mask.max()},{mask.min()}','yellow'))
         refined_scores = self.masked_forward(im,{'input' : mask})
